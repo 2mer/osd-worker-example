@@ -36,7 +36,7 @@ export default function workerPatch(tileSource: TileSource): TileSource {
 
 		},
 
-		downloadTileAbort: function (context) {
+		downloadTileAbort: function (_context) {
 			//we could set a flag which would stop the execution,
 			// and it would be right to do so, but it's not necessary
 			// (could help in debug scenarios though, in case of cycling

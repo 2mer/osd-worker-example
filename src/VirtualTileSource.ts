@@ -1,3 +1,5 @@
+import { TileSource } from "openseadragon";
+
 export default {
 	//please, do not use Infinity, OSD internally builds a cached tile hierarchy
 	height: 1024 * 1024 * 1024,
@@ -40,11 +42,11 @@ export default {
 		}
 		return 1.0;
 	},
-	downloadTileStart: function (context) {
+	downloadTileStart: function (this: TileSource, context) {
 		let size = this.getTileBounds(context.postData.level, context.postData.dx, context.postData.dy, true);
 		let bounds = this.getTileBounds(context.postData.level, context.postData.dx, context.postData.dy, false);
 		let canvas = document.createElement("canvas");
-		let ctx = canvas.getContext('2d');
+		let ctx = canvas.getContext('2d')!;
 
 		size.width = Math.floor(size.width);
 		size.height = Math.floor(size.height);
@@ -71,6 +73,8 @@ export default {
 
 			for (let y = 0; y < size.height; y++) {
 				let index = (y * size.width + x) * 4;
+
+				// @ts-ignore
 				imagedata.data[index] = Math.floor(this.iterateMandelbrot({
 					a: bounds.x + bounds.width * ((x + 1) / size.width),
 					b: bounds.y + bounds.height * ((y + 1) / size.height)
@@ -83,7 +87,7 @@ export default {
 		// note: we output context2D!
 		context.finish(ctx);
 	},
-	downloadTileAbort: function (context) {
+	downloadTileAbort: function (_context) {
 		//we could set a flag which would stop the execution,
 		// and it would be right to do so, but it's not necessary
 		// (could help in debug scenarios though, in case of cycling

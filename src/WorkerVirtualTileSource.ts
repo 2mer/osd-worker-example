@@ -1,3 +1,4 @@
+import { TileSource } from "openseadragon";
 import MandlebrotWorker from "./MandlebrotImageWorker";
 import { v4 } from "uuid";
 
@@ -26,7 +27,7 @@ export default {
 		};
 	},
 
-	downloadTileStart: function (context) {
+	downloadTileStart: function (this: TileSource, context) {
 		let size = this.getTileBounds(context.postData.level, context.postData.dx, context.postData.dy, true);
 		let bounds = this.getTileBounds(context.postData.level, context.postData.dx, context.postData.dy, false);
 		let canvas = document.createElement("canvas");
@@ -78,7 +79,7 @@ export default {
 		MandlebrotWorker.postMessage(event);
 
 	},
-	downloadTileAbort: function (context) {
+	downloadTileAbort: function (_context) {
 		//we could set a flag which would stop the execution,
 		// and it would be right to do so, but it's not necessary
 		// (could help in debug scenarios though, in case of cycling
